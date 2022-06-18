@@ -1,4 +1,4 @@
-package catbadges.common.spigot
+package com.rikonardo.mycatbadges.spigot
 
 import com.rikonardo.catbadge.badge.*
 import dev.virefire.yok.Yok
@@ -7,11 +7,11 @@ import javax.imageio.ImageIO
 
 @RegisterBadge(
     category = "SpigotMC",
-    name = "Current Version",
-    description = "Current version of SpigotMC resource",
+    name = "Total Downloads",
+    description = "Total downloads of SpigotMC resource",
 )
 @Suppress("DuplicatedCode")
-class SpigotVersion : BadgeProvider {
+class SpigotDownloads : BadgeProvider {
     @BadgeProperty("resource_id")
     lateinit var resourceId: String
 
@@ -25,9 +25,9 @@ class SpigotVersion : BadgeProvider {
         if (res.status == 404) throw BadgeError("Resource not found")
         if (res.status != 200) throw BadgeError("SpigotMC responded with status ${res.status}")
         val downloads =
-            res.body.json.silent["current_version"].string ?: throw BadgeError("Could not find version")
+            res.body.json.silent["stats"]["downloads"].string ?: throw BadgeError("Could not find downloads")
         return Badge(
-            label = "Version",
+            label = "Downloads",
             message = downloads,
             icon = ImageIO.read(javaClass.getResourceAsStream("/com/rikonardo/catbadge/badges/spigot-white.png")),
             messageBackgroundColor = Color(0xED8106)
